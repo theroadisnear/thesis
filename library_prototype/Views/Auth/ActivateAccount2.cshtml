@@ -1,0 +1,161 @@
+﻿@using System.Web.Optimization;
+@model library_prototype.Models.MultipleModel.AuthModelVM
+@{
+    ViewBag.Title = "ActivateAccount2";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@Scripts.Render("~/Scripts/components/datepicker.min.js")
+@Scripts.Render("~/Scripts/components/form-select.min.js")
+@Scripts.Render("~/Scripts/core/switcher.js")
+@Styles.Render("~/Content/components/form-select.almost-flat.min.css")
+@Styles.Render("~/Content/components/datepicker.almost-flat.min.css")
+
+<div>
+    <div class="uk-container uk-container-center uk-width-1-2">
+        @using (Html.BeginForm("ActivateAccount2", "Auth", FormMethod.Post, new { @class = "uk-form uk-form-horizontal" }))
+            {
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor( u => u.UserModel.UserId)
+            <div id="activation1" class="uk-form uk-form-horizontal uk-margin-top">
+                <div class="uk-block uk-block-default uk-width-2-3">
+                    <ul class="uk-subnav uk-subnav-pill uk-hidden" data-uk-switcher="{connect:'#switch-from-content', animation:'uk-animation-fade'}">
+                        <li class="uk-active" aria-expanded="true"><a href="">Item1</a></li>
+                        <li aria-expanded="false" class=""><a href="">Item2</a></li>
+                        <li aria-expanded="false" class=""><a href="">Item3</a></li>
+                    </ul>
+                    <h3 class="uk-text-bold">Account Activation</h3>
+                    <ul id="switch-from-content" class="uk-switcher">
+                        <li>
+                            <div class="">
+                                <div class="uk-width-1-1">
+                                    <div class="uk-panel">
+                                        <h3 class="uk-panel-title">
+                                            Hi!
+                                            @Html.DisplayFor(u => u.UserModel.Student.FirstName)
+                                            @Html.DisplayFor(u => u.UserModel.Student.MiddleInitial)
+                                            @Html.DisplayFor(u => u.UserModel.Student.LastName)
+                                        </h3>
+                                        <p>
+                                            Thank you for using Online Public Access Catalog System. Kindly Confirm your
+                                            student information below and fill up the necessary account details.
+                                        </p>
+                                        <div class="uk-form-row">
+                                            Gender: @Html.DisplayFor(u => u.UserModel.Student.Gender)
+                                        </div>
+                                        <div class="uk-form-row uk-margin-top-remove">
+                                            Grade: @Html.DisplayFor(u => u.UserModel.Student.Grade)
+                                        </div>
+                                        <div class="uk-form-row uk-margin-top-remove">
+                                            Section: @Html.DisplayFor(u => u.UserModel.Student.Section)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="uk-align-right">
+                                    <a href="#" data-uk-switcher-item="next">Next</a>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="">
+                                <div class="uk-width-1-1">
+                                    <div class="uk-form-row">
+                                        @Html.LabelFor(u => u.ActivationModel1.Password, new { @for = "password", @class = "uk-form-label" })
+                                        <div class="uk-form-controls">
+                                            @Html.PasswordFor(u => u.ActivationModel1.Password, new { @placeholder = "password", @id = "password" })
+                                            @Html.ValidationMessageFor(u => u.ActivationModel1.Password, null, new { @class = "uk-form-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="uk-form-row">
+                                        @Html.LabelFor(u => u.ActivationModel1.ConfirmPassword, new { @for = "confirmPassword", @class = "uk-form-label" })
+                                        <div class="uk-form-controls">
+                                            @Html.PasswordFor(u => u.ActivationModel1.ConfirmPassword, new { @placeholder = "confirm password", @id = "confirmPassword" })
+                                            @Html.ValidationMessageFor(u => u.ActivationModel1.ConfirmPassword, null, new { @class = "uk-form-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="uk-form-row">
+                                        @Html.LabelFor(u => u.ActivationModel1.SecretQuestion, new { @for = "secretQuestion", @class = "uk-form-label" })
+                                        <div class="uk-form uk-form-controls">
+                                            @Html.TextBoxFor(u => u.ActivationModel1.SecretQuestion, new { @placeholder = "secret question", @id = "secretQuestion" })
+                                            @Html.ValidationMessageFor(u => u.ActivationModel1.SecretQuestion, null, new { @class = "uk-form-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="uk-form-row">
+                                        @Html.LabelFor(u => u.ActivationModel1.SecretAnswer, new { @for = "secretAnswer", @class = "uk-form-label" })
+                                        <div class="uk-form uk-form-controls">
+                                            @Html.TextBoxFor(u => u.ActivationModel1.SecretAnswer, new { @placeholder = "secret answer", @id = "secretAnswer" })
+                                            @Html.ValidationMessageFor(u => u.ActivationModel1.SecretAnswer, null, new { @class = "uk-form-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="uk-align-right">
+                                    <a href="#" data-uk-switcher-item="0">Back</a>
+                                    <a href="#" data-uk-switcher-item="next">Next</a>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="">
+                                <div class="uk-width-1-1">
+                                    <div class="uk-form-row">
+                                        @Html.LabelFor(u => u.ActivationModel1.Birthday, new { @for="birthday", @class = "uk-form-label"})
+                                        <div class="uk-form uk-form-controls">
+                                            <input type="text" name="ActivationModel1.Birthday" data-uk-datepicker="{format: 'MM/DD/YYYY'}" id="birthday" placeholder="mm/dd/yyyy">
+                                            @Html.ValidationMessageFor(u => u.ActivationModel1.Birthday, null, new { @class = "uk-form-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="uk-form-row">
+                                        @Html.LabelFor(u => u.ActivationModel1.ContactNumber, new { @for = "contactNumber", @class = "uk-form-label" })
+                                        <div class="uk-form uk-form-controls">
+                                            @Html.TextBoxFor(u => u.ActivationModel1.ContactNumber, new { @placeholder = "contact number", @id = "contactNumber" })
+                                            @Html.ValidationMessageFor(u => u.ActivationModel1.ContactNumber, null, new { @class = "uk-form-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="uk-form-row">
+                                        @Html.LabelFor(u => u.ActivationModel1.Address1, new { @for = "address1", @class = "uk-form-label" })
+                                        <div class="uk-form uk-form-controls">
+                                            @Html.TextBoxFor(u => u.ActivationModel1.Address1, new { @placeholder = "address line 1", @id = "address1" })
+                                            @Html.ValidationMessageFor(u => u.ActivationModel1.Address1, null, new { @class = "uk-form-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="uk-form-row">
+                                        @Html.LabelFor(u => u.ActivationModel1.Address2, new { @for = "address2", @class = "uk-form-label" })
+                                        <div class="uk-form uk-form-controls">
+                                            @Html.TextBoxFor(u => u.ActivationModel1.Address2, new { @placeholder = "address line 2", @id = "address2" })
+                                            @Html.ValidationMessageFor(u => u.ActivationModel1.Address2, null, new { @class = "uk-form-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="uk-form-row">
+                                        @Html.LabelFor(u => u.ActivationModel1.City, new { @for = "city", @class = "uk-form-label" })
+                                        <div class="uk-form uk-form-controls">
+                                            @Html.TextBoxFor(u => u.ActivationModel1.City, new { @placeholder = "city", @id = "city" })
+                                            @Html.ValidationMessageFor(u => u.ActivationModel1.City, null, new { @class = "uk-form-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="uk-form-row">
+                                        @Html.LabelFor(u => u.ActivationModel1.ZipCode, new { @for = "zipCode", @class = "uk-form-label" })
+                                        <div class="uk-form uk-form-controls">
+                                            @Html.TextBoxFor(u => u.ActivationModel1.ZipCode, new { @placeholder = "Zip Code", @id = "zipCode" })
+                                            @Html.ValidationMessageFor(u => u.ActivationModel1.ZipCode, null, new { @class = "uk-form-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="uk-form-row">
+                                        @Html.LabelFor(u => u.ActivationModel1.Country, new { @for = "country", @class = "uk-form-label" })
+                                        <div class="uk-form uk-form-controls">
+                                            @Html.TextBoxFor(u => u.ActivationModel1.Country, new { @placeholder = "country", @id = "country" })
+                                            @Html.ValidationMessageFor(u => u.ActivationModel1.Country, null, new { @class = "uk-form-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="uk-align-right">
+                                    <a href="#" data-uk-switcher-item="1">Back</a>
+                                    <button type="submit" class="uk-button">Submit</button>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+

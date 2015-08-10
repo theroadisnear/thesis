@@ -1,0 +1,30 @@
+﻿@using System.Web.Optimization;
+@{
+    ViewBag.Title = "_AdminLayout";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@Scripts.Render("~/Scripts/components/search.min.js")
+<div class="uk-container uk-margin-top">
+    <div class="uk-grid">
+        <div class="uk-width-medium-2-10 uk-margin-right">
+            <div class="uk-sticky-placeholder uk-margin">
+                <div class="uk-panel uk-panel-box uk-sticky-init uk-active" data-uk-sticky="{top:15, media: 780}">
+                    <form class="uk-search" data-uk-search>
+                        <input class="uk-search-field" type="search" placeholder="search..." />
+                    </form>
+                    <div class="uk-grid-divider">
+
+                    </div>
+                    <ul class="uk-nav uk-nav-side">
+                        <li>@Html.ActionLink("Admin", "Index", "Admin")</li>
+                        <li>@Html.ActionLink("Reservation", "Reservation", "Admin")</li>
+                        <li>@Html.ActionLink("Book Status", "BookStatus", "Admin")</li>
+                        <li>@Html.ActionLink("Register", "Register", "Admin")</li>
+                        <li>@Html.ActionLink("Add Book", "AddBook", "Admin")</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        @RenderBody()
+    </div>
+</div>

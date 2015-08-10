@@ -1,0 +1,19 @@
+﻿@using System.Web.Optimization;
+@model library_prototype.Models.MultipleModel.EditUserModel
+@{
+    ViewBag.Title = "EditUser";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="uk-container">
+    @using (Html.BeginForm("UpdateUser", "Admin", FormMethod.Post, new { @class = "uk-form uk-form-horizontal" }))
+    {
+    <div class="uk-form-row">
+        @Html.LabelFor(u => u.StudentModel.FirstName, new { @for = "firstName", @class = "uk-form-label" })
+        <div class="uk-form-controls">
+            @Html.EditorFor(u => u.StudentModel.FirstName, new { @placeholder = "first name", @id = "firstName" })
+            @Html.ValidationMessageFor(u => u.StudentModel.FirstName, null, new { @class = "uk-form-danger" })
+        </div>
+    </div>
+    }
+</div>

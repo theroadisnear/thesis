@@ -1,0 +1,50 @@
+﻿@using System.Web.Optimization;
+@model IEnumerable<library_prototype.DAL.LibraryDbContext.StudentModel>
+@{
+    ViewBag.Title = "UserIndex";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@Scripts.Render("~/Scripts/components/grid.js")
+<div class="uk-width-medium-7-10 uk-margin-small">
+    <h2>Accounts List</h2>
+    <ul id="sort1" class="uk-subnav uk-subnav-pill">
+        <li data-uk-sort="my-category">
+            <a href="#">Ascending</a>
+        </li>
+        <li data-uk-sort="my-category:desc">
+            <a href="#">Descending</a>
+        </li>
+    </ul>
+    <div class="" data-uk-grid="{controls:'#sort1'}">
+        @foreach (var item in Model)
+            {
+            <div data-my-category="@Html.DisplayFor(modelItem => item.LastName)">
+                <div class="uk-width-medium-9-10 uk-text-center">
+                    <div class="uk-thumbnail uk-overlay-hover uk-border-circle">
+                        <figure class="uk-overlay">
+                            <img class="uk-border-circle" width="200" height="200" src="@Url.Content("~/Image/default/profile_picture.png")" />
+                            <figcaption class="uk-overlay-panel uk-overlay-background uk-flex uk-flex-center uk-flex-middle uk-text-center uk-border-circle">
+                                <div>
+                                    <a href="/Admin/ShowUser" class="uk-icon-button uk-icon-user"></a>
+                                    <a href="#" class="uk-icon-button uk-icon-book"></a>
+                                    @Html.ActionLink(" ", "Edit", new { id = item.UserId }, new { @class = "uk-icon-button uk-icon-gear" })
+                                </div>
+                            </figcaption>
+                        </figure>
+                    </div>
+                    <h6 class="uk-margin-bottom-remove uk-margin-top-remove uk-text-center">
+                        Id Number
+                    </h6>
+                    <h2 class="uk-margin-bottom-remove uk-margin-top-remove uk-text-center">
+                        @Html.DisplayFor(modelItem => item.LastName), @Html.DisplayFor(modelItem => item.FirstName)
+                    </h2>
+                    <p class="uk-text-muted uk-margin-top-remove">
+                        Section
+                    </p>
+                </div>
+            </div>
+        }
+    </div>
+
+</div>

@@ -1,0 +1,46 @@
+﻿@using System.Web.Optimization;
+<!DOCTYPE html>
+<html lang="en-gb" dir="ltr" class="uk-notouch">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    @Scripts.Render("~/Scripts/jquery-2.1.4.js")
+    @Scripts.Render("~/Scripts/uikit.min.js")
+    @Scripts.Render("~/Scripts/components/sticky.min.js")
+    @Styles.Render("~/Content/uikit.almost-flat.min.css")
+</head>
+<body>
+<nav class="uk-navbar">
+    <a href="" class="uk-navbar-brand">Brand</a>
+    <ul class="uk-navbar-nav uk-margin-left">
+        <li class="uk-parent" data-uk-dropdown>
+            <a>Navbar</a>
+            <div class="uk-dropdown uk-dropdown-navbar">
+                <ul class="uk-nav uk-nav-navbar">
+                    <li><a>Sample 1</a></li>
+                    <li><a>Sample 2</a></li>
+                    <li class="uk-nav-divider"></li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+    <div class="uk-navbar-content uk-align-right">
+        <ul class="uk-navbar-nav">
+            <li class="uk-parent" data-uk-dropdown>
+                <a>User <i><img src="@Url.Content("~/Image/placeholder_avatar.png")" class="uk-border-circle" /></i></a>
+                <div class="uk-dropdown uk-dropdown-navbar">
+                    <ul class="uk-nav uk-nav-navbar">
+                        <li><a>Profile</a></li>
+                        <li><a>Settings</a></li>
+                        <li class="uk-nav-divider"></li>
+                        <li>@Html.ActionLink("Log out", "Logout", "Auth")</li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>
+@RenderBody()
+</body>
+</html>
