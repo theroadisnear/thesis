@@ -6,6 +6,8 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
 using library_prototype.App_Start;
+using System.Web.Helpers;
+using System.Security.Claims;
 
 namespace library_prototype
 {
@@ -20,6 +22,7 @@ namespace library_prototype
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+            AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.Role;
         }
     }
 }

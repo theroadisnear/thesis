@@ -25,26 +25,42 @@ namespace library_prototype.DAL
         public DbSet<StudentModel> Students { get; set; }
         public DbSet<ImageModel> Images { get; set; }
         public DbSet<GradesModel> Grades { get; set; }
+        public DbSet<SectionsModel> Sections { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            //modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+            //modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();//modelBuilder.Entity<UserModel>().HasRequired(u => u.Image).WithRequiredDependent( u => u.User).WillCascadeOnDelete(false);
+            //modelBuilder.Entity<GradesModel>().HasRequired(u => u.Image).WithRequiredDependent( g => g.Grade).WillCascadeOnDelete(false);
+            //modelBuilder.Entity<SectionsModel>().HasRequired(u => u.Image).WithRequiredDependent( s => s.Section).WillCascadeOnDelete(false);
+            
+
+            //modelBuilder.Entity<UserModel>().HasOptional(i => i.Image).WithOptionalDependent(i => i.User).WillCascadeOnDelete(false);
+            //modelBuilder.Entity<GradesModel>().HasOptional(i => i.Image).WithOptionalDependent(i => i.Grade).WillCascadeOnDelete(false);
+            //modelBuilder.Entity<SectionsModel>().HasOptional(i => i.Image).WithOptionalDependent(i => i.Section).WillCascadeOnDelete(false);
+            //
+
+            //modelBuilder.Entity<ImageModel>().HasOptional(i => i.Grade).WithOptionalPrincipal();
+            modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
+            modelBuilder.Entity<UserModel>().HasRequired(u => u.Image).WithRequiredPrincipal().WillCascadeOnDelete(false);
+            modelBuilder.Entity<GradesModel>().HasRequired(u => u.Image).WithRequiredPrincipal().WillCascadeOnDelete(false);
+            modelBuilder.Entity<SectionsModel>().HasRequired(u => u.Image).WithRequiredPrincipal().WillCascadeOnDelete(false);
         }
 
         [Table("Users")]
         public class UserModel
         {
-            [Key]
+            [Column(Order = 0), Key]
             [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
             public Guid UserId { get; set; }
+            [ForeignKey("Image")]
+            public Guid? ImageId { get; set; }
             [StringLength(450)]
             [Index(IsUnique = true)]
             public string Email { get; set; }
             public string Password { get; set; }
             public string PasswordSalt { get; set; }
-            [StringLength(450)]
-            [Index(IsUnique = true)]
             public string Pincode { get; set; }
+            public string PincodeSalt { get; set; }
             public string Role { get; set; }
             public string SecretQuestion { get; set; }
             public string SecretAnswer { get; set; }
@@ -55,6 +71,7 @@ namespace library_prototype.DAL
             public DateTime? UpdatedAt { get; set; }
 
             public virtual StudentModel Student { get; set; }
+            public virtual ImageModel Image { get; set; }
         }
 
         [Table("Students")]
@@ -82,18 +99,45 @@ namespace library_prototype.DAL
         [Table("Grades")]
         public class GradesModel
         {
-            [Key]
+            [Column(Order = 0), Key]
             [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
             public Guid Id { get; set; }
+            [ForeignKey("Image")]
+            public Guid? ImageId { get; set; }
             [StringLength(450)]
-            [Index(IsUnique =true)]
+            [Index(IsUnique = true)]
             public string Grade { get; set; }
+            public DateTime? CreatedAt { get; set; }
+            public DateTime? UpdatedAt { get; set; }
+
+            public virtual ICollection<SectionsModel> Sections { get; set; }
+            public virtual ImageModel Image { get; set; }
+
+        }
+
+        [Table("Sections")]
+        public class SectionsModel
+        {
+            [Column(Order = 0), Key]
+            [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
+            public Guid Id { get; set; }
+            [Column(Order = 1), ForeignKey("Grade")]
+            public Guid GradeId { get; set; }
+            [ForeignKey("Image")]
+            public Guid? ImageId { get; set; }
             [StringLength(450)]
             [Index(IsUnique = true)]
             public String Section { get; set; }
+            [DefaultValue("false")]
+            public bool Deleted { get; set; }
             public DateTime? CreatedAt { get; set; }
             public DateTime? UpdatedAt { get; set; }
+
+            public virtual GradesModel Grade { get; set; }
+            public virtual ImageModel Image { get; set; }
+
         }
+
         [Table("UserAddresses")]
         public class UserAddressModel
         {
@@ -113,17 +157,15 @@ namespace library_prototype.DAL
         [Table("Images")]
         public class ImageModel
         {
-            [Key, ForeignKey("User")]
-            public Guid UserId { get; set; }
+            [Key]
+            [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
+            public Guid ImageId { get; set; }
             public string Path { get; set; }
-            [StringLength(450)]
-            [Index(IsUnique = true)]
             public string Name { get; set; }
             public DateTime? CreatedAt { get; set; }
             public DateTime? UpdatedAt { get; set; }
-
-            public virtual UserModel User { get; set; }
+            
         }
-        
+
     }
 }

@@ -186,23 +186,28 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="CustomClass\CustomValidationMessage.cs" />
     <Compile Include="DAL\LibraryDbContext.cs" />
     <Compile Include="DAL\LibraryDbSeed.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201508100657132_LibraryDbContext.cs" />
-    <Compile Include="Migrations\201508100657132_LibraryDbContext.Designer.cs">
-      <DependentUpon>201508100657132_LibraryDbContext.cs</DependentUpon>
+    <Compile Include="Migrations\201508270950265_LibraryDbContext.cs" />
+    <Compile Include="Migrations\201508270950265_LibraryDbContext.Designer.cs">
+      <DependentUpon>201508270950265_LibraryDbContext.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ActivationModel.cs" />
     <Compile Include="Models\ActivationModel1.cs" />
     <Compile Include="Models\Book_Information.cs" />
     <Compile Include="Models\AuthModel.cs" />
+    <Compile Include="Models\CreateSectionModel.cs" />
+    <Compile Include="Models\CreateGradeModel.cs" />
     <Compile Include="Models\FormManagementModel.cs" />
+    <Compile Include="Models\ImageModel.cs" />
     <Compile Include="Models\MultipleModel.cs" />
     <Compile Include="Models\RegisterModel.cs" />
+    <Compile Include="Models\UpdateUser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -424,7 +429,9 @@
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\uikit.js" />
     <Content Include="Scripts\uikit.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -460,16 +467,20 @@
     <Content Include="Views\Admin\EditForms.cshtml" />
     <Content Include="Views\Admin\FormSection.cshtml" />
     <Content Include="Views\Admin\EditUser.cshtml" />
+    <Content Include="Views\Admin\GradesIndex.cshtml" />
+    <Content Include="Views\Admin\SectionIndex.cshtml" />
+    <Content Include="Views\Admin\UserInformation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Image\profile_picture\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201508100657132_LibraryDbContext.resx">
-      <DependentUpon>201508100657132_LibraryDbContext.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201508270950265_LibraryDbContext.resx">
+      <DependentUpon>201508270950265_LibraryDbContext.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

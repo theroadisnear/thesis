@@ -116,6 +116,8 @@ C:\Users\rodner\Documents\Visual Studio 2015\Projects\library_prototype\library_
 C:\Users\rodner\Documents\Visual Studio 2015\Projects\library_prototype\library_prototype\obj\Debug\library_prototype.csproj.GenerateResource.Cache
 C:\Users\rodner\Documents\Visual Studio 2015\Projects\library_prototype\library_prototype\obj\Debug\library_prototype.dll
 C:\Users\rodner\Documents\Visual Studio 2015\Projects\library_prototype\library_prototype\obj\Debug\library_prototype.pdb
+C:\Users\rodner\Desktop\library_prototype\library_prototype\bin\System.Web.Http.dll
+C:\Users\rodner\Desktop\library_prototype\library_prototype\bin\System.Web.Http.Owin.dll
 C:\Users\rodner\Desktop\library_prototype\library_prototype\bin\library_prototype.dll.config
 C:\Users\rodner\Desktop\library_prototype\library_prototype\bin\library_prototype.dll
 C:\Users\rodner\Desktop\library_prototype\library_prototype\bin\library_prototype.pdb
@@ -137,8 +139,6 @@ C:\Users\rodner\Desktop\library_prototype\library_prototype\bin\System.Net.Http.
 C:\Users\rodner\Desktop\library_prototype\library_prototype\bin\System.Net.Http.Formatting.dll
 C:\Users\rodner\Desktop\library_prototype\library_prototype\bin\System.Net.Http.Primitives.dll
 C:\Users\rodner\Desktop\library_prototype\library_prototype\bin\System.Web.Helpers.dll
-C:\Users\rodner\Desktop\library_prototype\library_prototype\bin\System.Web.Http.dll
-C:\Users\rodner\Desktop\library_prototype\library_prototype\bin\System.Web.Http.Owin.dll
 C:\Users\rodner\Desktop\library_prototype\library_prototype\bin\System.Web.Http.WebHost.dll
 C:\Users\rodner\Desktop\library_prototype\library_prototype\bin\System.Web.Mvc.dll
 C:\Users\rodner\Desktop\library_prototype\library_prototype\bin\System.Web.Optimization.dll

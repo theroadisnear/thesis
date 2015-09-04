@@ -1,4 +1,5 @@
 ﻿@using System.Web.Optimization;
+@using library_prototype.CustomClass;
 @model library_prototype.Models.MultipleModel.LoginModelVM
 <!DOCTYPE html>
 <html lang="en">
@@ -10,14 +11,28 @@
     @Styles.Render("~/Content/uikit.css")
     @Scripts.Render("~/Scripts/jquery-2.1.4.min.js")
     @Scripts.Render("~/Scripts/uikit.min.js")
-    @Scripts.Render("~/Scripts/jquery.unobtrusive-ajax.min.js");
+    @Scripts.Render("~/Scripts/jquery.unobtrusive-ajax.min.js");   
+    @Scripts.Render("~/Scripts/components/notify.min.js")
+    @Styles.Render("~/Content/components/notify.almost-flat.min.css")
 </head>
 <body class="uk-height-1-1 uk-margin-large-top" style="background-image:url()">
+    @if (Model.Error == true)
+    {
+        var errorList = CustomValidationMessage.GetErrorList(ViewData.ModelState).ToList();
+        foreach (var error in errorList)
+        {
+            <script>
+            $(document).ready(function () {
+                UIkit.notify('@Html.DisplayFor(modelItem => error)', { status: 'warning', timeout: 0, pos: 'bottom-right' });
+            });
+            </script>
+        }
+    }
     <div class="uk-text-center uk-margin">
         <div class="uk-vertical-align-middle uk-width-1-2">
-            @using (Html.BeginForm(new { @class = "" }))
+            @using (Html.BeginForm("Login", "Auth", FormMethod.Post, new { @class = "" }))
             {
-                @Html.ValidationSummary(true)
+                @Html.AntiForgeryToken()
                 <div class="uk-panel uk-form">
                     <div class="uk-form-row">
                         <div class="uk-align-center">
@@ -27,13 +42,11 @@
                     <div class="uk-form-row">
                         <div>
                             @Html.TextBoxFor(u => u.AuthModel.Email, new { @placeholder = "Email" })
-                            @Html.ValidationMessageFor(u => u.AuthModel.Email)
                         </div>
                     </div>
                     <div class="uk-form-row">
                         <div>
                             @Html.PasswordFor(u => u.AuthModel.Password, new { @placeholder = "Password" })
-                            @Html.ValidationMessageFor(u => u.AuthModel.Password)
                         </div>
                     </div>
                     <div class="uk-form-row uk-text-small">
@@ -64,16 +77,14 @@
         <div class="uk-offcanvas-bar uk-offcanvas-bar-flip uk-vertical-align-middle uk-width-1-2">
             @using (Html.BeginForm("ActivateAccount", "Auth", FormMethod.Post, new { @class = "uk-form uk-form-horizontal" }))
             {
-                @Html.ValidationSummary(true)
+                @Html.AntiForgeryToken()
                 <div id="activation1" class="uk-form uk-form-horizontal uk-margin-large-top uk-margin-large-left uk-margin-right">
                     <h3 class="uk-text-contrast uk-text-bold">Account Activation</h3>
                     <div class="uk-form-row">
                         @Html.TextBoxFor(u => u.ActivationModel.Email, new { @placeholder = "email address", @id = "emailAddress" })
-                        @Html.ValidationMessageFor(u => u.ActivationModel.Email, null, new { @class = "uk-form-danger" })
                     </div>
                     <div class="uk-form-row">
                         @Html.PasswordFor(u => u.ActivationModel.PinCode, new { @placeholder = "pincode", @id = "pinCode" })
-                        @Html.ValidationMessageFor(u => u.ActivationModel.PinCode, null, new { @class = "uk-form-danger" })
                     </div>
                     <div class="uk-form-row">
                         <button type="submit" class="uk-width-1-5 uk-button">Submit</button>

@@ -13,19 +13,29 @@ using System.Data.Entity;
 namespace library_prototype.Controllers
 {
     [AllowAnonymous]
-    [Authorize(Roles = "administrator")]
     public class AuthController : Controller
     {
+
         
-
-
         [HttpGet]
         public ActionResult Login()
         {
+            var ctx = Request.GetOwinContext();
+            var authManager = ctx.Authentication;
+            if( authManager.User.IsInRole("administrator") )
+            {
+                return RedirectToAction("GradesIndex", "Admin");
+            }
+            else if ( authManager.User.IsInRole("student") )
+            {
+                return RedirectToAction("Index", "Auth");
+            }
+
             MultipleModel.LoginModelVM loginVM = new MultipleModel.LoginModelVM(); 
             return View(loginVM);
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult Login(MultipleModel.LoginModelVM user)
         {
@@ -37,7 +47,7 @@ namespace library_prototype.Controllers
                     var emailCheck = db.Users.FirstOrDefault(u => u.Email == user.AuthModel.Email);
                     var getPasswordSalt = db.Users.Where(u => u.Email == user.AuthModel.Email).Select(u => u.PasswordSalt);
                     
-                    if ((emailCheck != null) && (getPasswordSalt != null) && (emailCheck.Status == true))
+                    if ((emailCheck != null) && (getPasswordSalt != null) && (emailCheck.Deleted == false) && (emailCheck.Status == true))
                     {
                         var materializePasswordSalt = getPasswordSalt.ToList();
                         var passwordSalt = materializePasswordSalt[0];
@@ -69,7 +79,7 @@ namespace library_prototype.Controllers
 
                             if (emailCheck.Role == "administrator")
                             {
-                                return RedirectToAction("UserIndex", "Admin");
+                                return RedirectToAction("GradesIndex", "Admin");
                             }
                             else
                             {
@@ -78,21 +88,24 @@ namespace library_prototype.Controllers
                         }
                         else
                         {
+                            user.Error = true;
                             ModelState.AddModelError("", "Invalid email or password");
                         }
                     }
-                    else if((emailCheck != null) && (emailCheck.Status == false))
+                    else if((emailCheck != null) && (emailCheck.Status == false) && (emailCheck.Deleted == false) )
                     {
+                        user.Error = true;
                         ModelState.AddModelError("", "Please activate the account");
                     }
-                    else if(emailCheck == null)
+                    else if(emailCheck == null || ((emailCheck.Deleted == true) && (emailCheck.Status == false)))
                     {
+                        user.Error = true;
                         ModelState.AddModelError("", "Account does not exist");
                     }
                 }
                 
             }
-            
+            user.Error = true;
             return View(user);
         }
 
@@ -127,7 +140,7 @@ namespace library_prototype.Controllers
             return View();
         }
         
-        
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult ActivateAccount(MultipleModel.LoginModelVM login)
         {
@@ -135,33 +148,71 @@ namespace library_prototype.Controllers
             {
                 using (var db = new LibraryDbContext())
                 {
-                    var email = db.Users.SingleOrDefault(u => u.Email == login.ActivationModel.Email);
+                    var emailCheck = db.Users.Where(u => u.Email == login.ActivationModel.Email).ToList();
+                    if(emailCheck[0] !=null)
+                    {
+                        var email = db.Users.SingleOrDefault(u => u.Email == login.ActivationModel.Email);
+                        if ((email.Password != null) && (email.PasswordSalt != null))
+                        {
+                            login.Error = true;
+                            ModelState.AddModelError("", "The account is already activated");
+                            return View("Login", login);
+                        }
+                        else if ((email != null) && (email.Pincode == login.ActivationModel.PinCode))
+                        {
+                            var ctx = Request.GetOwinContext();
+                            var authManager = ctx.Authentication;
 
-                    if ((email.Password != null) && (email.PasswordSalt != null))
-                    {
-                        ModelState.AddModelError("", "The account is already activated");
+                            var identity = new ClaimsIdentity(new[] {
+                            new Claim(ClaimTypes.Name, "acc_act"),
+                            new Claim(ClaimTypes.Role, "activation")
+                        }, "ApplicationCookie");
+
+                            authManager.SignIn(identity);
+                            return RedirectToAction("ActivateAccount2", new { id = email.UserId });
+                        }
+                        else if ((email != null) && (email.Pincode != login.ActivationModel.PinCode))
+                        {
+                            login.Error = true;
+                            ModelState.AddModelError("", "Incorrect pin entered");
+                            return View("Login", login);
+                        }
                     }
-                    else if ((email != null) && (email.Pincode == login.ActivationModel.PinCode))
+                    else if (emailCheck[0] == null)
                     {
-                        return RedirectToAction("ActivateAccount2", new { id = email.UserId});
+                        login.Error = true;
+                        ModelState.AddModelError("", "The account does not exist");
                     }
+                    
                 }
             }
-            ModelState.AddModelError("","The account does not exist");
+            login.Error = true;
             return View("Login", login);
         }
-        
+
+        [Authorize(Roles = "activation")]
         [HttpGet]
         public ActionResult ActivateAccount2(Guid? id)
         {
-            using (var db = new LibraryDbContext())
+            if (id.HasValue)
             {
-                MultipleModel.AuthModelVM vm = new MultipleModel.AuthModelVM();
-                vm.UserModel = db.Users.Include(u => u.Student).SingleOrDefault(u => u.UserId == id);
-                return View(vm);
-            }
-        }
+                using (var db = new LibraryDbContext())
+                {
+                    MultipleModel.AuthModelVM vm = new MultipleModel.AuthModelVM();
+                    vm.UserModel = db.Users.Include(u => u.Student).SingleOrDefault(u => u.UserId == id);
 
+                    if( (vm.UserModel.Status == false) && (vm.UserModel.Deleted == false) )
+                    {
+                        return View(vm);
+                    }
+                    
+                }
+            }
+
+            return RedirectToAction("Login");
+        }
+        
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult ActivateAccount2(MultipleModel.AuthModelVM request)
         {
@@ -195,10 +246,14 @@ namespace library_prototype.Controllers
                     db.Entry(vm.UserModel).State = EntityState.Modified;
                     db.SaveChanges();
 
+                    var ctx = Request.GetOwinContext();
+                    var authManager = ctx.Authentication;
+                    authManager.SignOut("ApplicationCookie");
                     return RedirectToAction("Login");
                 }
             }
             return View();
         }
+
     }
 }
