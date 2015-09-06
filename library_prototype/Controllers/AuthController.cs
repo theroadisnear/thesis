@@ -9,6 +9,7 @@ using SimpleCrypto;
 using System.Security.Claims;
 using System.Net.Http;
 using System.Data.Entity;
+using library_prototype.CustomClass;
 
 namespace library_prototype.Controllers
 {
@@ -31,7 +32,15 @@ namespace library_prototype.Controllers
                 return RedirectToAction("Index", "Auth");
             }
 
-            MultipleModel.LoginModelVM loginVM = new MultipleModel.LoginModelVM(); 
+            MultipleModel.LoginModelVM loginVM = new MultipleModel.LoginModelVM();
+            var loginTD = TempData["LoginTD"] as MultipleModel.LoginModelVM;
+
+            if(loginTD != null)
+            {
+                loginVM.Error = loginTD.Error;
+                loginVM.Message = loginTD.Message;
+            }
+
             return View(loginVM);
         }
 
@@ -152,13 +161,14 @@ namespace library_prototype.Controllers
                     if(emailCheck[0] !=null)
                     {
                         var email = db.Users.SingleOrDefault(u => u.Email == login.ActivationModel.Email);
+                        var crypto = new PBKDF2();
                         if ((email.Password != null) && (email.PasswordSalt != null))
                         {
                             login.Error = true;
                             ModelState.AddModelError("", "The account is already activated");
                             return View("Login", login);
                         }
-                        else if ((email != null) && (email.Pincode == login.ActivationModel.PinCode))
+                        else if ((email != null) && (email.Pincode == crypto.Compute(login.ActivationModel.PinCode, email.PincodeSalt)))
                         {
                             var ctx = Request.GetOwinContext();
                             var authManager = ctx.Authentication;
@@ -199,13 +209,16 @@ namespace library_prototype.Controllers
                 using (var db = new LibraryDbContext())
                 {
                     MultipleModel.AuthModelVM vm = new MultipleModel.AuthModelVM();
-                    vm.UserModel = db.Users.Include(u => u.Student).SingleOrDefault(u => u.UserId == id);
 
-                    if( (vm.UserModel.Status == false) && (vm.UserModel.Deleted == false) )
-                    {
-                        return View(vm);
-                    }
+                    var userActivation = TempData["UserActivation"] as MultipleModel.AuthModelVM;
                     
+                    if(userActivation != null)
+                    {
+                        vm = userActivation;
+                    }
+
+                    vm.UserModel = db.Users.Include(u => u.Student).SingleOrDefault(u => u.UserId == id);
+                    return View(vm);
                 }
             }
 
@@ -249,10 +262,22 @@ namespace library_prototype.Controllers
                     var ctx = Request.GetOwinContext();
                     var authManager = ctx.Authentication;
                     authManager.SignOut("ApplicationCookie");
+
+                    var loginVM = new MultipleModel.LoginModelVM();
+                    loginVM.Error = false;
+                    var errorList = new List<string>();
+                    string message = "You have successfully activated your account. Please log in";
+                    errorList.Add(message);
+                    loginVM.Message = errorList;
+                    TempData["LoginTD"] = loginVM;
+
                     return RedirectToAction("Login");
                 }
             }
-            return View();
+            request.Error = true;
+            request.Message = CustomValidationMessage.GetErrorList(ViewData.ModelState);
+            TempData["UserActivation"] = request;
+            return RedirectToAction("ActivateAccount2", new { id = request.UserModel.UserId });
         }
 
     }

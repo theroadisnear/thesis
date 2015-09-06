@@ -1,0 +1,43 @@
+﻿@using System.Web.Optimization;
+@{
+    ViewBag.Title = "UserProfile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    WebImage image = null;
+    var newFileName = "";
+    var imagePath = "";
+    if(IsPost)
+    {
+        image = WebImage.GetImageFromRequest();
+        if(image!=null)
+        {
+            newFileName = Guid.NewGuid().ToString()+"_"+Path.GetFileName(image.FileName);
+            imagePath = @"Image\profile_picture\" + newFileName;
+            image.Save(@"~/" + imagePath);
+        }
+    }
+}
+
+<div class="uk-container-center">
+    <h2>User Profile</h2>
+    <div class="uk-align-center">
+        <form action="" method="post" enctype="multipart/form-data">
+            <div class="uk-width-1-5">
+                @if (imagePath == "")
+                {
+                    <label for="image">
+                        <img class="uk-border-circle" src="@Url.Content("~/Image/placeholder_avatar.png")" />
+                    </label>
+                }
+                else if (imagePath != "")
+                {
+                    <label for="image">
+                        <img class="uk-border-circle" src="@Url.Content("~/"+imagePath)" />
+                    </label>
+                }
+            </div>
+                <input type="file" id="image" style="display:none" name="image" />
+                <input type="submit" id="qwe" value="Upload"/>
+        </form>
+    </div>
+</div>

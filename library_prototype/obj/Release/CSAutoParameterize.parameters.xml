@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <parameters>
   <parameter name="DefaultConnection-Web.config Connection String" description="DefaultConnection Connection String used in web.config by the application to access the database." defaultValue="Data Source=(LocalDB)\MSSQLLocalDB;Initial Catalog=LibraryDbSystem;Integrated Security=SSPI;AttachDBFilename=|DataDirectory|\LibraryDbContext.mdf" tags="SqlConnectionString">
-    <parameterEntry kind="XmlFile" scope="C:\\Users\\rodner\\Documents\\Visual\ Studio\ 2015\\Projects\\library_prototype\\library_prototype\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='DefaultConnection']/@connectionString" />
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\rodner\\Desktop\\library_prototype\\library_prototype\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='DefaultConnection']/@connectionString" />
   </parameter>
   <parameter name="LibraryDbContext-Web.config Connection String" description="LibraryDbContext Connection String used in web.config by the application to access the database." defaultValue="LibraryDbContext_ConnectionString" tags="SqlConnectionString">
-    <parameterEntry kind="XmlFile" scope="C:\\Users\\rodner\\Documents\\Visual\ Studio\ 2015\\Projects\\library_prototype\\library_prototype\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='LibraryDbContext']/@connectionString" />
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\rodner\\Desktop\\library_prototype\\library_prototype\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='LibraryDbContext']/@connectionString" />
   </parameter>
   <parameter name="LibraryDbContext_DatabasePublish-Web.config Connection String" description="LibraryDbContext_DatabasePublish Connection String used in web.config by the application to access the database." defaultValue="LibraryDbContext_DatabasePublish.ConnetionString" tags="SqlConnectionString">
-    <parameterEntry kind="XmlFile" scope="C:\\Users\\rodner\\Documents\\Visual\ Studio\ 2015\\Projects\\library_prototype\\library_prototype\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='LibraryDbContext_DatabasePublish']/@connectionString" />
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\rodner\\Desktop\\library_prototype\\library_prototype\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='LibraryDbContext_DatabasePublish']/@connectionString" />
   </parameter>
 </parameters>

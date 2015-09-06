@@ -1,0 +1,90 @@
+﻿@using System.Web.Optimization;
+@using library_prototype.DAL;
+@model library_prototype.Models.MultipleModel.CreateGradeVM
+@{
+    ViewBag.Title = "GradesIndex";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@if (Model.Error == true)
+{
+    foreach (var error in Model.Message)
+    {
+        <script>
+            $(document).ready(function () {
+                UIkit.notify('@Html.DisplayFor(modelItem => error)', { status: 'warning', timeout: 0, pos: 'bottom-right' });
+            });
+        </script>
+    }
+}
+else if (Model.Error == false)
+{
+    <script>
+            $(document).ready(function () {
+                UIkit.notify('@Html.DisplayFor(m=>m.Message[0])', { status: 'success', timeout: 5000, pos: 'bottom-right' });
+            });
+    </script>
+}
+<div class="uk-margin-small">
+    <h2 class="">Groups</h2>
+    <ul class="uk-subnav uk-subnav-pill">
+        <li class="">
+            <a class="uk-button-primary" data-uk-modal="{target:'#create-grade'}">Create</a>
+        </li>
+    </ul>
+    <div class="uk-margin-left">
+        @if (!Model.Grades.Any())
+        {
+            <h2 class="uk-text-warning">There is no existing group</h2>
+        }
+        else if (Model.Grades.Any())
+        {
+            <ul class="uk-thumbnav">
+                @foreach (var item in Model.Grades)
+                {
+                    <li class="uk-animation-scale">
+                        <figure class="uk-overlay uk-animation-hover uk-animation-scale">
+                            @if (item.ImageId == null)
+                            {
+                                <img class="" src="@Url.Content("~/Image/default/group.png")" />
+                            }
+                            else
+                            {
+                                <img class="" src="@Url.Content(item.Image.Path)" />
+                            }
+                            <div class="uk-overlay-panel uk-overlay-background">
+                                <h4>@Html.DisplayFor(modelItem => item.Grade)</h4>
+                            </div>
+                            @Html.ActionLink(" ", "SectionIndex", new { id = item.Id }, new { @class = "uk-position-cover" })
+                        </figure>
+                    </li>
+                }
+            </ul>
+        }
+        
+    </div>
+</div>
+<div id="create-grade" class="uk-modal">
+    @using (Html.BeginForm("CreateGroup", "Admin", FormMethod.Post, new { @class = "uk-form uk-form-horizontal", enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="uk-modal-dialog">
+            <a class="uk-modal-close uk-close"></a>
+            <form class="uk-form uk-form-horizontal">
+                <fieldset data-uk-margin>
+                    <legend>Create Group</legend>
+                    <div class="uk-form-row">
+                        @Html.LabelFor(u => u.CreateGrade.Grade, new { @for = "group", @class = "uk-form-label" })
+                        <div class="uk-form-controls">
+                            @Html.TextBoxFor(u => u.CreateGrade.Grade, new { @placeholder = "group name", @id = "group" })
+                            @Html.ValidationMessageFor(u => u.CreateGrade.Grade, null, new { @class = "uk-form-danger" })
+                        </div>
+                    </div>
+                </fieldset>
+                <br />
+                <div class="uk-form-row">
+                    <button class="uk-width-1-5 uk-align-right uk-button uk-button-success" type="submit">OK</button>
+                </div>
+            </form>
+        </div>
+    }
+</div>

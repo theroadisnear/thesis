@@ -9,7 +9,7 @@ namespace library_prototype.Models
     public class CreateGradeModel
     {
         [Required]
-        [Display(Name = "Group Name")]
+        [Display(Name = "Group Name*")]
         [StringLength(50, MinimumLength = 2)]
         public string Grade { get; set; }
         

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="IIS Web Application Name" description="" value="thelibraryisnear" tags="IisApp">
+    <parameterEntry kind="ProviderPath" scope="IisApp" match="^C:\\Users\\rodner\\Desktop\\library_prototype\\library_prototype\\obj\\Release\\Package\\PackageTmp$" />
+    <parameterEntry kind="ProviderPath" scope="setAcl" match="^C:\\Users\\rodner\\Desktop\\library_prototype\\library_prototype\\obj\\Release\\Package\\PackageTmp$" />
+  </parameter>
+  <parameter name="DefaultConnection-Web.config Connection String" description="" value="Data Source=tcp:iqs9n7wye7.database.windows.net,1433;Initial Catalog=LibraryDbContext;Integrated Security=False;User ID=theroadisnear@iqs9n7wye7;Password={your_password_here};Connect Timeout=30;Encrypt=True" tags="">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\rodner\\Desktop\\library_prototype\\library_prototype\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='DefaultConnection']/@connectionString" />
+  </parameter>
+  <parameter name="LibraryDbContext-Web.config Connection String" description="" value="Server=tcp:iqs9n7wye7.database.windows.net,1433;Database=LibraryDbContext;User ID=theroadisnear@iqs9n7wye7;Password={your_password_here};Trusted_Connection=False;Encrypt=True;Connection Timeout=30;" tags="">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\rodner\\Desktop\\library_prototype\\library_prototype\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='LibraryDbContext']/@connectionString" />
+  </parameter>
+</parameters>

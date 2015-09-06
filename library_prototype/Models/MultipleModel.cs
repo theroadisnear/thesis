@@ -13,6 +13,8 @@ namespace library_prototype.Models
             public ActivationModel1 ActivationModel1 { get; set; }
             public LibraryDbContext.UserModel UserModel { get; set; }
             public LibraryDbContext.UserAddressModel UserAddressModel { get; set; }
+            public bool? Error { get; set; }
+            public List<string> Message { get; set; }
         }
 
         public class LoginModelVM

@@ -187,14 +187,15 @@
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="CustomClass\CustomValidationMessage.cs" />
+    <Compile Include="CustomClass\SMTP.cs" />
     <Compile Include="DAL\LibraryDbContext.cs" />
     <Compile Include="DAL\LibraryDbSeed.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201508270950265_LibraryDbContext.cs" />
-    <Compile Include="Migrations\201508270950265_LibraryDbContext.Designer.cs">
-      <DependentUpon>201508270950265_LibraryDbContext.cs</DependentUpon>
+    <Compile Include="Migrations\201509041815556_LibraryDbContext.cs" />
+    <Compile Include="Migrations\201509041815556_LibraryDbContext.Designer.cs">
+      <DependentUpon>201509041815556_LibraryDbContext.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ActivationModel.cs" />
@@ -474,13 +475,14 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Image\profile_picture\" />
+    <Folder Include="Scripts\angular_scripts\password\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201508270950265_LibraryDbContext.resx">
-      <DependentUpon>201508270950265_LibraryDbContext.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201509041815556_LibraryDbContext.resx">
+      <DependentUpon>201509041815556_LibraryDbContext.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

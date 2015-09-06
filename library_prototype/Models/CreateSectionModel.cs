@@ -9,7 +9,7 @@ namespace library_prototype.Models
     public class CreateSectionModel
     {
         [Required]
-        [Display(Name = "Group Name")]
+        [Display(Name = "Section Name*")]
         [StringLength(50, MinimumLength = 2)]
         public string Section { get; set; }
         

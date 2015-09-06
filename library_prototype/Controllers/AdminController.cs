@@ -274,6 +274,9 @@ namespace library_prototype.Controllers
                         db.Students.Add(newStudent);
                         db.SaveChanges();
 
+                        SMTP smtp = new SMTP();
+                        smtp.SendEmal(newUser.Email, pin);
+
                         reg.Error = false;
                         var errorList = new List<string>();
                         string message = "You have successfully added a user(" + newUser.Email + ")";

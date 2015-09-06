@@ -1,0 +1,169 @@
+﻿@using System.Web.Optimization;
+@model library_prototype.Models.MultipleModel.UserInformationVM
+@{
+    ViewBag.Title = "UserInformation";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@if (Model.Error == true)
+{
+    foreach (var error in Model.Message)
+    {
+        <script>
+            $(document).ready(function () {
+                UIkit.notify('@Html.DisplayFor(modelItem => error)', { status: 'warning', timeout: 0, pos: 'bottom-right' });
+            });
+        </script>
+    }
+}
+else if (Model.Error == false)
+{
+    <script>
+            $(document).ready(function () {
+                UIkit.notify('@Html.DisplayFor(m=>m.Message[0])', { status: 'success', timeout: 5000, pos: 'bottom-right' });
+            });
+    </script>
+}
+<div>
+    <div class="uk-width-medium-1-1">
+        <ul class="uk-subnav uk-hidden-small uk-align-right">
+            <li data-uk-dropdown="{mode:'click'}">
+                <a class="uk-icon-gear uk-icon-large"></a>
+                <div class="uk-dropdown uk-dropdown-small">
+                    <ul class="uk-nav uk-nav-dropdown uk-dropdown-up">
+                        <li><a class="" data-uk-modal="{target:'#update-user'}">Update</a></li>
+                        <li><a class="" data-uk-modal="{target:'#delete-user'}">Delete</a></li>
+                        <li><a class="" data-uk-modal="{target:'#delete-user'}">ReActvate</a></li>
+                        <li><a class="" data-uk-modal="{target:'#reset-pin'}">Reset Pin</a></li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+        <h3>User Information</h3>
+        <span class="uk-align-right uk-hidden-small">
+            <img class="uk-border-circle" width="150" height="150" src="@Url.Content("~/Image/default/profile_picture.png")" />
+        </span>
+        <span class="uk-align-right uk-visible-small">
+            <img class="uk-border-circle" width="50" height="50" src="@Url.Content("~/Image/default/profile_picture.png")" />
+        </span>
+        <div class="">
+            <div class="uk-form-row">
+                <div class="uk-margin-top">
+                    <dl class="uk-description-list-horizontal">
+                        <dt class="uk-text-right">
+                            Name:
+                        </dt>
+                        <dt class="uk-text-right">
+                            Grade/Year:
+                        </dt>
+                        <dt class="uk-text-right">
+                            Section:
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(u => u.User.Student.LastName), @Html.DisplayFor(u => u.User.Student.FirstName) @Html.DisplayFor(u => u.User.Student.MiddleInitial).
+                        </dd>
+                        <dd>
+                            @Html.DisplayFor(u => u.User.Student.Grade)
+                        </dd>
+                        <dd>
+                            @Html.DisplayFor(u => u.User.Student.Section)
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr class="uk-grid-divider"/>
+    <div>
+        <h3>Book History</h3>
+    </div>
+    <hr class="uk-grid-divider" />
+    <div>
+        <h3>User Logs</h3>
+    </div>
+    <hr class="uk-grid-divider" />
+</div>
+<div id="update-user" class="uk-modal">
+    @using (Html.BeginForm("UpdateUser", "Admin", FormMethod.Post, new { @class = "uk-form uk-form-horizontal" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="uk-modal-dialog">
+            <a class="uk-modal-close uk-close"></a>
+            <form class="uk-form uk-form-horizontal">
+                <fieldset data-uk-margin>
+                    <legend>Update User Information</legend>
+                    @Html.HiddenFor(u => u.User.UserId)
+                    <div class="uk-form-row">
+                        @Html.LabelFor(u => u.NewUserInfo.FirstName, new { @for = "firstName", @class = "uk-form-label" })
+                        <div class="uk-form-controls">
+                            @Html.TextBoxFor(u => u.NewUserInfo.FirstName, new { @id = "firstName", @Value = Model.User.Student.FirstName })
+                        </div>
+                    </div>
+                    <div class="uk-form-row">
+                        @Html.LabelFor(u => u.NewUserInfo.MiddleInitial, new { @for = "middleInitial", @class = "uk-form-label" })
+                        <div class="uk-form-controls">
+                            @Html.TextBoxFor(u => u.NewUserInfo.MiddleInitial, new { @id = "middleInitial", @Value = Model.User.Student.MiddleInitial })
+                        </div>
+                    </div>
+                    <div class="uk-form-row">
+                        @Html.LabelFor(u => u.NewUserInfo.LastName, new { @for = "lastName", @class = "uk-form-label" })
+                        <div class="uk-form-controls">
+                            @Html.TextBoxFor(u => u.NewUserInfo.LastName, new { @id = "lastName", @Value = Model.User.Student.LastName })
+                        </div>
+                    </div>
+                    <div class="uk-form-row">
+                        @Html.LabelFor(u => u.NewUserInfo.Gender, new { @for = "gender", @class = "uk-form-label" })
+                        <div class="uk-form-controls">
+                            @if (Model.User.Student.Gender == "male")
+                            {
+                                @Html.DropDownListFor(u => u.NewUserInfo.Gender, new List<SelectListItem>
+                                {
+                                    new SelectListItem() { Text = "Male", Value = "male", Selected = true },
+                                   new SelectListItem() { Text = "Female", Value = "female", Selected = false },
+                               }, new { @id = "gender" })
+                            }
+                            else
+                            {
+                                @Html.DropDownListFor(u => u.NewUserInfo.Gender, new List<SelectListItem>
+                                {
+                                new SelectListItem() { Text = "Male", Value = "male", Selected = false },
+                                   new SelectListItem() { Text = "Female", Value = "female", Selected = true },
+                               }, new { @id = "gender" })
+    }
+                            
+                        </div>
+                    </div>
+                    <div class="uk-form-row">
+                        @Html.LabelFor(u => u.NewUserInfo.EmailAddress, new { @for = "emailAddress", @class = "uk-form-label" })
+                        <div class="uk-form-controls">
+                            @Html.TextBoxFor(u => u.NewUserInfo.EmailAddress, new { @id = "emailAddress", @Value = Model.User.Email })
+                        </div>
+                    </div>
+                    <div class="uk-form-row">
+                        <button type="submit" class="uk-width-1-5 uk-align-right uk-button uk-button-primary">Update</button>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    }
+</div>
+<div id="delete-user" class="uk-modal">
+    @using (Html.BeginForm("DeleteUser", "Admin", FormMethod.Post, new { @class = "uk-form uk-form-horizontal" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="uk-modal-dialog">
+            <a class="uk-modal-close uk-close"></a>
+            <form class="uk-form uk-form-horizontal">
+                <fieldset data-uk-margin>
+                    <legend>Delete User</legend>
+                    @Html.HiddenFor(u => u.User.UserId)
+                    <div class="uk-form-row">
+                        Are you sure to delete @Html.DisplayFor(u => u.User.Email) ?
+                    </div>
+                    <div class="uk-form-row">
+                        <button type="submit" class="uk-width-1-5 uk-align-right uk-button uk-button-primary">Yes</button>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    }
+</div>
