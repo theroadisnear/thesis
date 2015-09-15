@@ -62,10 +62,10 @@ else if (Model.Error == false)
                             @Html.DisplayFor(u => u.User.Student.LastName), @Html.DisplayFor(u => u.User.Student.FirstName) @Html.DisplayFor(u => u.User.Student.MiddleInitial).
                         </dd>
                         <dd>
-                            @Html.DisplayFor(u => u.User.Student.Grade)
+                            @Html.DisplayFor(u => u.User.Student.Section.Grade.Grade)
                         </dd>
                         <dd>
-                            @Html.DisplayFor(u => u.User.Student.Section)
+                            @Html.DisplayFor(u => u.User.Student.Section.Section)
                         </dd>
                     </dl>
                 </div>
@@ -91,7 +91,7 @@ else if (Model.Error == false)
             <form class="uk-form uk-form-horizontal">
                 <fieldset data-uk-margin>
                     <legend>Update User Information</legend>
-                    @Html.HiddenFor(u => u.User.UserId)
+                    @Html.HiddenFor(u => u.User.Id)
                     <div class="uk-form-row">
                         @Html.LabelFor(u => u.NewUserInfo.FirstName, new { @for = "firstName", @class = "uk-form-label uk-text-right" })
                         <div class="uk-form-controls">
@@ -155,7 +155,7 @@ else if (Model.Error == false)
             <form class="uk-form uk-form-horizontal">
                 <fieldset data-uk-margin>
                     <legend>Delete User</legend>
-                    @Html.HiddenFor(u => u.User.UserId)
+                    @Html.HiddenFor(u => u.User.Id)
                     <div class="uk-form-row">
                         Are you sure to delete @Html.DisplayFor(u => u.User.Email) ?
                     </div>

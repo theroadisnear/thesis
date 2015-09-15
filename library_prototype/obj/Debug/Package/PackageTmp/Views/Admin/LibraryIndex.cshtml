@@ -1,0 +1,43 @@
+﻿
+@{
+    ViewBag.Title = "LibraryIndex";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<script>
+    if (navigator.webkitGetUserMedia != null) {
+        var options = {
+            video: true,
+            audio: false
+        };
+
+        //request webcam access 
+        navigator.webkitGetUserMedia(options,
+            function (stream) {
+                //get the video tag 
+                var video = document.querySelector('video');
+                //turn the stream into a magic URL 
+                video.src = window.webkitURL.createObjectURL(stream);
+            },
+            function (e) {
+                console.log("error happened");
+            }
+        );
+    }
+</script>
+<div>
+    <video autoplay class="uk-width-1-4"></video>
+    <form>
+        <input type='button' id='snapshot' value="snapshot" />
+    </form>
+
+    <canvas id='canvas' width='400' height='400'></canvas> 
+    <script language='javascript'>
+        document.getElementById('snapshot').onclick = function ()
+        {
+            var video = document.querySelector('video');
+            var canvas = document.getElementById('canvas');
+            var ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0, 400, 400);
+        }
+    </script> 
+</div>

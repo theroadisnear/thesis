@@ -186,6 +186,9 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="CustomClass\Camera.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="CustomClass\CustomValidationMessage.cs" />
     <Compile Include="CustomClass\SMTP.cs" />
     <Compile Include="DAL\LibraryDbContext.cs" />
@@ -193,9 +196,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201509041815556_LibraryDbContext.cs" />
-    <Compile Include="Migrations\201509041815556_LibraryDbContext.Designer.cs">
-      <DependentUpon>201509041815556_LibraryDbContext.cs</DependentUpon>
+    <Compile Include="Migrations\201509121058227_LibraryDbContext.cs" />
+    <Compile Include="Migrations\201509121058227_LibraryDbContext.Designer.cs">
+      <DependentUpon>201509121058227_LibraryDbContext.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ActivationModel.cs" />
@@ -353,6 +356,7 @@
     <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\angular.min.js.map" />
     <Content Include="Scripts\angular-mocks.js" />
+    <Content Include="Scripts\BarcodeScanner.js" />
     <Content Include="Scripts\components\accordion.js" />
     <Content Include="Scripts\components\accordion.min.js" />
     <Content Include="Scripts\components\autocomplete.js" />
@@ -471,6 +475,7 @@
     <Content Include="Views\Admin\GradesIndex.cshtml" />
     <Content Include="Views\Admin\SectionIndex.cshtml" />
     <Content Include="Views\Admin\UserInformation.cshtml" />
+    <Content Include="Views\Admin\LibraryIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -481,8 +486,8 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201509041815556_LibraryDbContext.resx">
-      <DependentUpon>201509041815556_LibraryDbContext.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201509121058227_LibraryDbContext.resx">
+      <DependentUpon>201509121058227_LibraryDbContext.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

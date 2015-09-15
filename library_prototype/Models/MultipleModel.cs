@@ -59,8 +59,7 @@ namespace library_prototype.Models
 
         public class UserIndexVM
         {
-            public IEnumerable<LibraryDbContext.UserModel> Users { get; set; }
-            public ICollection<LibraryDbContext.StudentModel> Student { get; set; }
+            public ICollection<LibraryDbContext.UserModel> Users { get; set; }
             public RegisterModel Register { get; set; }
             public Guid? SectionID { get; set; }
             public Guid? GroupID { get; set; }

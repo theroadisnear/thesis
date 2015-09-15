@@ -6,7 +6,4 @@
   <parameter name="LibraryDbContext-Web.config Connection String" description="LibraryDbContext Connection String used in web.config by the application to access the database." defaultValue="LibraryDbContext_ConnectionString" tags="SqlConnectionString">
     <parameterEntry kind="XmlFile" scope="C:\\Users\\rodner\\Desktop\\library_prototype\\library_prototype\\obj\\Debug\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='LibraryDbContext']/@connectionString" />
   </parameter>
-  <parameter name="LibraryDbContext_DatabasePublish-Web.config Connection String" description="LibraryDbContext_DatabasePublish Connection String used in web.config by the application to access the database." defaultValue="LibraryDbContext_DatabasePublish.ConnetionString" tags="SqlConnectionString">
-    <parameterEntry kind="XmlFile" scope="C:\\Users\\rodner\\Desktop\\library_prototype\\library_prototype\\obj\\Debug\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='LibraryDbContext_DatabasePublish']/@connectionString" />
-  </parameter>
 </parameters>

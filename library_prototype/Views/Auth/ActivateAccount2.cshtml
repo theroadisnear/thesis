@@ -41,7 +41,7 @@ else if (Model.Error == false)
         @using (Html.BeginForm("ActivateAccount2", "Auth", FormMethod.Post, new { @class = "uk-form uk-form-horizontal uk-margin-left", @name="form" }))
             {
             @Html.AntiForgeryToken()
-            @Html.HiddenFor( u => u.UserModel.UserId)
+            @Html.HiddenFor( u => u.UserModel.Id)
             <div id="activation1" class="uk-form uk-form-horizontal uk-margin-top-remove uk-margin-bottom">
                 <div class="uk-width-medium-1-1 uk-align-center">
                     <ul class="uk-subnav uk-subnav-pill uk-margin-large-left" data-uk-switcher="{connect:'#switch-from-content', animation:'uk-animation-fade'}">
@@ -84,10 +84,10 @@ else if (Model.Error == false)
                                                 @Html.DisplayFor(u => u.UserModel.Student.Gender)
                                             </dd>
                                             <dd>
-                                                @Html.DisplayFor(u => u.UserModel.Student.Grade)
+                                                @Html.DisplayFor(u => u.UserModel.Student.Section.Grade.Grade)
                                             </dd>
                                             <dd>
-                                                @Html.DisplayFor(u => u.UserModel.Student.Section)
+                                                @Html.DisplayFor(u => u.UserModel.Student.Section.Section)
                                             </dd>
                                         </dl>
                                     </div>

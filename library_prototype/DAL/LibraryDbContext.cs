@@ -15,24 +15,25 @@ namespace library_prototype.DAL
         public LibraryDbContext() : base("LibraryDbContext")
         {
             //Database.SetInitializer<LibraryDbContext>(new LibraryDbSeed());
-            Database.SetInitializer<LibraryDbContext>(new CreateDatabaseIfNotExists<LibraryDbContext>());
-            Database.SetInitializer<LibraryDbContext>(new DropCreateDatabaseIfModelChanges<LibraryDbContext>());
+            //Database.SetInitializer<LibraryDbContext>(new CreateDatabaseIfNotExists<LibraryDbContext>());
+            //Database.SetInitializer<LibraryDbContext>(new DropCreateDatabaseIfModelChanges<LibraryDbContext>());
 
         }
 
         public DbSet<UserModel> Users { get; set; }
         public DbSet<UserAddressModel> UserAddresses { get; set; }
         public DbSet<StudentModel> Students { get; set; }
-        public DbSet<ImageModel> Images { get; set; }
-        public DbSet<GradesModel> Grades { get; set; }
         public DbSet<SectionsModel> Sections { get; set; }
+        public DbSet<GradesModel> Grades { get; set; }
+        public DbSet<ImageModel> Images { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             //modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();//modelBuilder.Entity<UserModel>().HasRequired(u => u.Image).WithRequiredDependent( u => u.User).WillCascadeOnDelete(false);
             //modelBuilder.Entity<GradesModel>().HasRequired(u => u.Image).WithRequiredDependent( g => g.Grade).WillCascadeOnDelete(false);
             //modelBuilder.Entity<SectionsModel>().HasRequired(u => u.Image).WithRequiredDependent( s => s.Section).WillCascadeOnDelete(false);
-            
+
 
             //modelBuilder.Entity<UserModel>().HasOptional(i => i.Image).WithOptionalDependent(i => i.User).WillCascadeOnDelete(false);
             //modelBuilder.Entity<GradesModel>().HasOptional(i => i.Image).WithOptionalDependent(i => i.Grade).WillCascadeOnDelete(false);
@@ -40,10 +41,10 @@ namespace library_prototype.DAL
             //
 
             //modelBuilder.Entity<ImageModel>().HasOptional(i => i.Grade).WithOptionalPrincipal();
-            modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
-            modelBuilder.Entity<UserModel>().HasRequired(u => u.Image).WithRequiredPrincipal().WillCascadeOnDelete(false);
-            modelBuilder.Entity<GradesModel>().HasRequired(u => u.Image).WithRequiredPrincipal().WillCascadeOnDelete(false);
-            modelBuilder.Entity<SectionsModel>().HasRequired(u => u.Image).WithRequiredPrincipal().WillCascadeOnDelete(false);
+            //modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
+            //modelBuilder.Entity<UserModel>().HasRequired(u => u.Image).WithRequiredPrincipal().WillCascadeOnDelete(false);
+            //modelBuilder.Entity<GradesModel>().HasRequired(u => u.Image).WithRequiredPrincipal().WillCascadeOnDelete(false);
+            //modelBuilder.Entity<SectionsModel>().HasRequired(u => u.Image).WithRequiredPrincipal().WillCascadeOnDelete(false);
         }
 
         [Table("Users")]
@@ -51,7 +52,9 @@ namespace library_prototype.DAL
         {
             [Column(Order = 0), Key]
             [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
-            public Guid UserId { get; set; }
+            public Guid Id { get; set; }
+            [ForeignKey("Student")]
+            public Guid StudentId { get; set; }
             [ForeignKey("Image")]
             public Guid? ImageId { get; set; }
             [StringLength(450)]
@@ -77,14 +80,15 @@ namespace library_prototype.DAL
         [Table("Students")]
         public class StudentModel
         {
-            [Key, ForeignKey("User")]
-            public Guid UserId { get; set; }
+            [Key]
+            [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
+            public Guid Id { get; set; }
+            [ForeignKey("Section")]
+            public Guid SectionId { get; set; }
             public string FirstName { get; set; }
             public string MiddleInitial { get; set; }
             public string LastName { get; set; }
             public string Gender { get; set; }
-            public string Grade { get; set; }
-            public string Section { get; set; }
             [DisplayFormat(DataFormatString = "{MM/DD/YYYY}")]
             [Range(typeof(DateTime), "1/1/1950", "12/31/2012")]
             public DateTime? Birthday { get; set; }
@@ -93,49 +97,7 @@ namespace library_prototype.DAL
             public DateTime? CreatedAt { get; set; }
             public DateTime? UpdatedAt { get; set; }
 
-            public virtual UserModel User { get; set; }
-        }
-
-        [Table("Grades")]
-        public class GradesModel
-        {
-            [Column(Order = 0), Key]
-            [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
-            public Guid Id { get; set; }
-            [ForeignKey("Image")]
-            public Guid? ImageId { get; set; }
-            [StringLength(450)]
-            [Index(IsUnique = true)]
-            public string Grade { get; set; }
-            public DateTime? CreatedAt { get; set; }
-            public DateTime? UpdatedAt { get; set; }
-
-            public virtual ICollection<SectionsModel> Sections { get; set; }
-            public virtual ImageModel Image { get; set; }
-
-        }
-
-        [Table("Sections")]
-        public class SectionsModel
-        {
-            [Column(Order = 0), Key]
-            [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
-            public Guid Id { get; set; }
-            [Column(Order = 1), ForeignKey("Grade")]
-            public Guid GradeId { get; set; }
-            [ForeignKey("Image")]
-            public Guid? ImageId { get; set; }
-            [StringLength(450)]
-            [Index(IsUnique = true)]
-            public String Section { get; set; }
-            [DefaultValue("false")]
-            public bool Deleted { get; set; }
-            public DateTime? CreatedAt { get; set; }
-            public DateTime? UpdatedAt { get; set; }
-
-            public virtual GradesModel Grade { get; set; }
-            public virtual ImageModel Image { get; set; }
-
+            public virtual SectionsModel Section{ get; set; }
         }
 
         [Table("UserAddresses")]
@@ -153,6 +115,52 @@ namespace library_prototype.DAL
 
             public virtual UserModel User { get; set; }
         }
+
+
+        [Table("Sections")]
+        public class SectionsModel
+        {
+            [Key]
+            [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
+            public Guid Id { get; set; }
+            [ForeignKey("Grade")]
+            public Guid GradeId { get; set; }
+            [ForeignKey("Image")]
+            public Guid? ImageId { get; set; }
+            [StringLength(450)]
+            [Index(IsUnique = true)]
+            public String Section { get; set; }
+            [DefaultValue("false")]
+            public bool Deleted { get; set; }
+            public DateTime? CreatedAt { get; set; }
+            public DateTime? UpdatedAt { get; set; }
+
+            public virtual GradesModel Grade { get; set; }
+            public virtual ImageModel Image { get; set; }
+
+        }
+
+        [Table("Grades")]
+        public class GradesModel
+        {
+            [Column(Order = 0), Key]
+            [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
+            public Guid Id { get; set; }
+            [ForeignKey("Image")]
+            public Guid? ImageId { get; set; }
+            [StringLength(450)]
+            [Index(IsUnique = true)]
+            public string Grade { get; set; }
+            [DefaultValue("false")]
+            public bool Delete { get; set; }
+            public DateTime? CreatedAt { get; set; }
+            public DateTime? UpdatedAt { get; set; }
+
+            public virtual ICollection<SectionsModel> Sections { get; set; }
+            public virtual ImageModel Image { get; set; }
+
+        }
+
 
         [Table("Images")]
         public class ImageModel

@@ -41,6 +41,9 @@ namespace library_prototype.Controllers
                 loginVM.Message = loginTD.Message;
             }
 
+
+
+
             return View(loginVM);
         }
 
@@ -64,15 +67,13 @@ namespace library_prototype.Controllers
 
                         if (user.AuthModel.Email != null && emailCheck.Password == encryptedPassword)
                         {
-                            var getName = db.Students.Where(u => u.UserId == emailCheck.UserId).Select(u => u.FirstName);
-                            var materializeName = getName.ToList();
-                            var name = materializeName[0];
+                            var name = emailCheck.Student.FirstName;
 
-                            var getEmail = db.Users.Where(u => u.UserId == emailCheck.UserId).Select(u => u.Email);
+                            var getEmail = db.Users.Where(u => u.Id == emailCheck.Id).Select(u => u.Email);
                             var materializeEmail = getEmail.ToList();
                             var email = materializeEmail[0];
 
-                            var getRole = db.Users.Where(u => u.UserId == emailCheck.UserId).Select(u => u.Role);
+                            var getRole = db.Users.Where(u => u.Id == emailCheck.Id).Select(u => u.Role);
                             var materializeRole = getRole.ToList();
                             var role = materializeRole[0];
 
@@ -179,7 +180,7 @@ namespace library_prototype.Controllers
                         }, "ApplicationCookie");
 
                             authManager.SignIn(identity);
-                            return RedirectToAction("ActivateAccount2", new { id = email.UserId });
+                            return RedirectToAction("ActivateAccount2", new { id = email.Id });
                         }
                         else if ((email != null) && (email.Pincode != login.ActivationModel.PinCode))
                         {
@@ -217,7 +218,7 @@ namespace library_prototype.Controllers
                         vm = userActivation;
                     }
 
-                    vm.UserModel = db.Users.Include(u => u.Student).SingleOrDefault(u => u.UserId == id);
+                    vm.UserModel = db.Users.SingleOrDefault(u => u.Id == id);
                     return View(vm);
                 }
             }
@@ -234,7 +235,7 @@ namespace library_prototype.Controllers
                 using (var db = new LibraryDbContext())
                 {
                     MultipleModel.AuthModelVM vm = new MultipleModel.AuthModelVM();
-                    vm.UserModel = db.Users.SingleOrDefault(u => u.UserId == request.UserModel.UserId);
+                    vm.UserModel = db.Users.SingleOrDefault(u => u.Id == request.UserModel.Id);
                     var crypto = new SimpleCrypto.PBKDF2();
                     var encrypPass = crypto.Compute(request.ActivationModel1.Password);
 
@@ -248,7 +249,7 @@ namespace library_prototype.Controllers
 
                     vm.UserModel.Student.Birthday = request.ActivationModel1.Birthday;
                     vm.UserAddressModel = db.UserAddresses.Create();
-                    vm.UserAddressModel.UserId = vm.UserModel.UserId;
+                    vm.UserAddressModel.UserId = vm.UserModel.Id;
                     vm.UserAddressModel.ZipCode = request.ActivationModel1.ZipCode;
                     vm.UserAddressModel.Address1 = request.ActivationModel1.Address1;
                     vm.UserAddressModel.Address2 = request.ActivationModel1.Address2;
@@ -277,7 +278,7 @@ namespace library_prototype.Controllers
             request.Error = true;
             request.Message = CustomValidationMessage.GetErrorList(ViewData.ModelState);
             TempData["UserActivation"] = request;
-            return RedirectToAction("ActivateAccount2", new { id = request.UserModel.UserId });
+            return RedirectToAction("ActivateAccount2", new { id = request.UserModel.Id });
         }
 
     }

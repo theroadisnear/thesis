@@ -100,7 +100,7 @@ namespace library_prototype.Controllers
 
             if (id != null)
             {
-                var getUser = db.Users.SingleOrDefault(u => u.UserId == id);
+                var getUser = db.Users.SingleOrDefault(u => u.Id == id);
                 
                 if(getUser != null && getUser.Deleted != true)
                 {
@@ -108,8 +108,7 @@ namespace library_prototype.Controllers
                 }
                 else if(getUser != null && getUser.Deleted == true)
                 {
-                    var getSection = db.Sections.FirstOrDefault(s => s.Section == getUser.Student.Section);
-                    return RedirectToAction("UserIndex", new { id = getSection.Id});
+                    return RedirectToAction("UserIndex", new { id = getUser.Student.SectionId});
                 }
             }
             else
@@ -125,7 +124,7 @@ namespace library_prototype.Controllers
         {
             var errorList = new List<string>();
             string message = null;
-            var user = db.Users.SingleOrDefault(u=>u.UserId == vm.User.UserId);
+            var user = db.Users.SingleOrDefault(u=>u.Id == vm.User.Id);
             if(user != null)
             {
                 if(ModelState.IsValid)
@@ -146,14 +145,14 @@ namespace library_prototype.Controllers
                     errorList.Add(message);
                     vm.Message = errorList;
                     TempData["UserInformationTD"] = vm;
-                    return RedirectToAction("UserInformation", new { id = vm.User.UserId });
+                    return RedirectToAction("UserInformation", new { id = vm.User.Id });
                 }
                 else
                 {
                     vm.Error = true;
                     vm.Message = CustomValidationMessage.GetErrorList(ViewData.ModelState);
                     TempData["UserInformationTD"] = vm;
-                    return RedirectToAction("UserInformation", new { id = vm.User.UserId });
+                    return RedirectToAction("UserInformation", new { id = vm.User.Id });
                 }
             }
             vm.Error = true;
@@ -162,7 +161,7 @@ namespace library_prototype.Controllers
             vm.Message = errorList;
             TempData["UserInformationTD"] = vm;
 
-            return RedirectToAction("UserInformation", new { id = vm.User.UserId});
+            return RedirectToAction("UserInformation", new { id = vm.User.Id});
         }
 
         [ValidateAntiForgeryToken]
@@ -171,7 +170,7 @@ namespace library_prototype.Controllers
         {
             var errorList = new List<string>();
             string message = null;
-            var user = db.Users.SingleOrDefault(u => u.UserId == vm.User.UserId);
+            var user = db.Users.SingleOrDefault(u => u.Id == vm.User.Id);
             if (user != null)
             {
                 user.Deleted = true;
@@ -184,9 +183,8 @@ namespace library_prototype.Controllers
                 errorList.Add(message);
                 vm.Message = errorList;
                 TempData["UserInformationTD"] = vm;
-
-                var getSection = db.Sections.FirstOrDefault(s=>s.Section == user.Student.Section);
-                return RedirectToAction("UserIndex", new { id = getSection.Id });
+                
+                return RedirectToAction("UserIndex", new { id = user.Student.SectionId });
             }
             vm.Error = true;
             message = "The selected user doesn't exist";
@@ -194,7 +192,7 @@ namespace library_prototype.Controllers
             vm.Message = errorList;
             TempData["UserInformationTD"] = vm;
 
-            return RedirectToAction("UserInformation", new { id = vm.User.UserId });
+            return RedirectToAction("UserInformation", new { id = vm.User.Id });
         }
 
         [HttpGet]
@@ -206,17 +204,25 @@ namespace library_prototype.Controllers
             userVM.GroupID = section.GradeId;
             userVM.SectionID = id;
             userVM.SectionName = section.Section;
-            userVM.Student = db.Students.Where(s => s.Section == section.Section).Where(u=>u.User.Deleted == false).OrderBy(u => u.Gender)
-                .ThenBy(u => u.LastName).ToList();
+            var getUsers = db.Users.Where(u=>u.Student.SectionId == id).Where(u => u.Deleted == false).OrderBy(u=>u.Student.Gender)
+                .ThenBy(u=>u.Student.LastName).ToList();
+            userVM.Users = getUsers;
 
-            var userRegister = TempData["UserRegistration"] as MultipleModel.UserIndexVM;
+            var tempData = TempData["UserIndexTD"] as MultipleModel.UserIndexVM;
             var userInformation = TempData["UserInformationTD"] as MultipleModel.UserInformationVM;
 
-            if (userRegister != null)
+            if (tempData != null)
             {
-                userVM.Register = userRegister.Register;
-                userVM.Error = userRegister.Error;
-                userVM.Message = userRegister.Message;
+                userVM.Error = tempData.Error;
+                userVM.Message = tempData.Message;
+                if(tempData.Error == false)
+                {
+                    userVM.Register = null;
+                }
+                else if (tempData.Error == true)
+                {
+                    userVM.Register = tempData.Register;
+                }
             }
             else if(userInformation != null)
             {
@@ -240,7 +246,7 @@ namespace library_prototype.Controllers
                     errorList.Add(message);
                     reg.Message = errorList;
 
-                    TempData["UserRegistration"] = reg;
+                    TempData["UserIndexTD"] = reg;
                     return RedirectToAction("UserIndex", new { id = reg.SectionID });
                 }
                 else
@@ -262,12 +268,11 @@ namespace library_prototype.Controllers
                         db.Users.Add(newUser);
                         var newStudent = db.Students.Create();
                         var section = db.Sections.FirstOrDefault(s => s.Id == reg.SectionID);
+                        newStudent.SectionId = section.Id;
                         newStudent.FirstName = reg.Register.FirstName;
                         newStudent.MiddleInitial = reg.Register.MiddleInitial;
                         newStudent.LastName = reg.Register.LastName;
                         newStudent.Gender = reg.Register.Gender;
-                        newStudent.Grade = section.Grade.Grade;
-                        newStudent.Section = section.Section;
                         newStudent.CreatedAt = DateTime.Now;
                         newStudent.UpdatedAt = DateTime.Now;
 
@@ -282,9 +287,10 @@ namespace library_prototype.Controllers
                         string message = "You have successfully added a user(" + newUser.Email + ")";
                         errorList.Add(message);
                         reg.Message = errorList;
-                        TempData["UserRegistration"] = reg;
+                        TempData["UserIndexTD"] = reg;
+
+                        return RedirectToAction("UserIndex", new { id = reg.SectionID });
                     }
-                    return RedirectToAction("UserIndex", new { id = reg.SectionID });
                 }
 
             }
@@ -293,7 +299,7 @@ namespace library_prototype.Controllers
                 reg.Error = true;
                 reg.Message = CustomValidationMessage.GetErrorList(ViewData.ModelState);
             }
-            TempData["UserRegistration"] = reg;
+            TempData["UserIndexTD"] = reg;
             return RedirectToAction("UserIndex", new { id = reg.SectionID });
         }
 
@@ -439,6 +445,11 @@ namespace library_prototype.Controllers
             vm.Message = CustomValidationMessage.GetErrorList(ViewData.ModelState);
             TempData["AddSection"] = vm;
             return RedirectToAction("SectionIndex", new { id = vm.GroupID });
+        }
+        
+        public ActionResult LibraryIndex()
+        {
+            return View();
         }     
     }
     

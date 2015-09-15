@@ -52,16 +52,16 @@
     </ul>
 </div>
 <div class="uk-margin-left">
-    @if (Model.Student.Count == 0)
+    @if (Model.Users.Count == 0)
     {
         <h2 class="uk-text-warning">There is no existing user in this section</h2>
     }
     else
     {
         <div class="uk-grid-small" data-uk-grid="{controls:'#sort1'}">
-            @foreach (var item in Model.Student)
+            @foreach (var item in Model.Users)
             {
-                <div class="uk-animation-scale-up" data-my-category="@Html.DisplayFor(modelItem => item.LastName)">
+                <div class="uk-animation-scale-up" data-my-category="@Html.DisplayFor(modelItem => item.Student.LastName)">
                     <div class="uk-text-center">
                         <div class="uk-thumbnail uk-overlay-hover uk-border-circle">
                             <figure class="uk-overlay">
@@ -70,16 +70,16 @@
                                     <div>
                                         <a href="/Admin/ShowUser" class="uk-icon-button uk-icon-user"></a>
                                         <a href="#" class="uk-icon-button uk-icon-book"></a>
-                                        @Html.ActionLink(" ", "UserInformation", new { id = item.UserId }, new { @class = "uk-icon-button uk-icon-gear" })
+                                        @Html.ActionLink(" ", "UserInformation", new { id = item.Id }, new { @class = "uk-icon-button uk-icon-gear" })
                                     </div>
                                 </figcaption>
                             </figure>
                         </div>
                         <h6 class="uk-margin-bottom-remove uk-margin-top-remove uk-text-center">
-                            @Html.DisplayFor(modelItem => item.User.Email)
+                            @Html.DisplayFor(modelItem => item.Email)
                         </h6>
                         <h2 class="uk-margin-bottom-remove uk-margin-top-remove uk-text-center">
-                            @Html.DisplayFor(modelItem => item.LastName), @Html.DisplayFor(modelItem => item.FirstName)
+                            @Html.DisplayFor(modelItem => item.Student.LastName), @Html.DisplayFor(modelItem => item.Student.FirstName)
                         </h2>
                         <p class="uk-text-muted uk-margin-top-remove">
                             Status
